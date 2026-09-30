@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["task_alias", "underlying_goal", "goal_categories", "task_type", "outcome", "explicit_user_sentiment", "successes", "frictions", "user_corrections", "interaction_pattern", "brief_summary", "confidence", "quality_flags"],
+  "properties": {
+    "task_alias": {"type": "string", "maxLength": 32},
+    "underlying_goal": {"type": "string", "maxLength": 2000},
+    "goal_categories": {"type": "array", "items": {"type": "string", "maxLength": 200}, "maxItems": 5},
+    "task_type": {"type": "string", "enum": ["single_task", "multi_turn", "exploration", "review", "implementation", "operations", "learning", "other"]},
+    "outcome": {"type": "string", "enum": ["completed", "mostly_completed", "partially_completed", "blocked", "abandoned", "unknown"]},
+    "explicit_user_sentiment": {
+      "type": "array", "maxItems": 4,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["level", "detail", "evidence_refs"],
+        "properties": {
+          "level": {"type": "string", "enum": ["positive", "negative", "mixed", "neutral"]},
+          "detail": {"type": "string", "maxLength": 1200},
+          "evidence_refs": {"type": "array", "items": {"type": "string", "maxLength": 64}}
+        }
+      }
+    },
+    "successes": {
+      "type": "array", "maxItems": 6,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["category", "detail", "evidence_refs"],
+        "properties": {
+          "category": {"type": "string", "maxLength": 200}, "detail": {"type": "string", "maxLength": 1200},
+          "evidence_refs": {"type": "array", "items": {"type": "string", "maxLength": 64}}
+        }
+      }
+    },
+    "frictions": {
+      "type": "array", "maxItems": 8,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["owner", "category", "consequence", "recovered", "evidence_refs"],
+        "properties": {
+          "owner": {"type": "string", "enum": ["agent", "user", "tool", "environment", "external", "unknown"]},
+          "category": {"type": "string", "maxLength": 200}, "consequence": {"type": "string", "maxLength": 1200}, "recovered": {"type": "boolean"},
+          "evidence_refs": {"type": "array", "items": {"type": "string", "maxLength": 64}}
+        }
+      }
+    },
+    "user_corrections": {
+      "type": "array", "maxItems": 6,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["normalized_instruction", "evidence_refs"],
+        "properties": {
+          "normalized_instruction": {"type": "string", "maxLength": 1200},
+          "evidence_refs": {"type": "array", "items": {"type": "string", "maxLength": 64}}
+        }
+      }
+    },
+    "interaction_pattern": {"type": "string", "maxLength": 2000},
+    "brief_summary": {"type": "string", "maxLength": 1200},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "quality_flags": {"type": "array", "items": {"type": "string", "maxLength": 120}, "maxItems": 8}
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "additionalProperties": false,
+  "required": ["title", "effective", "obstacle", "quick_win", "future_workflow", "confidence"],
+  "properties": {
+    "title": {"type": "string"},
+    "effective": {"$ref": "#/$defs/item"}, "obstacle": {"$ref": "#/$defs/item"},
+    "quick_win": {"$ref": "#/$defs/item"}, "future_workflow": {"$ref": "#/$defs/item"},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+  },
+  "$defs": {"item": {"type": "object", "additionalProperties": false, "required": ["title", "detail", "anchor", "evidence_refs"], "properties": {"title": {"type": "string"}, "detail": {"type": "string"}, "anchor": {"type": "string", "enum": ["project_areas", "interaction_style", "what_works", "friction_analysis", "suggestions", "on_the_horizon"]}, "evidence_refs": {"type": "array", "minItems": 1, "maxItems": 10, "items": {"type": "string"}}}}}
+}

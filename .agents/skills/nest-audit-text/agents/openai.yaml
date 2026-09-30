@@ -1,0 +1,7 @@
+interface:
+  display_name: "Nest · 约束文本质量审计"
+  short_description: "只读审计指定 Markdown 或对话文本的句子级质量：删掉判据与生成残留"
+  default_prompt: "使用 $nest-audit-text 只读审计以下 Markdown 文档：<绝对路径>"
+
+policy:
+  allow_implicit_invocation: false

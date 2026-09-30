@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "java -jar .workspace-assistant/foundation/host-hooks/codex/codex-session-start.jar",
+            "statusMessage": "Loading workspace context",
+            "additionalContextLimit": 0,
+            "async": false
+          }
+        ]
+      }
+    ]
+  }
+}

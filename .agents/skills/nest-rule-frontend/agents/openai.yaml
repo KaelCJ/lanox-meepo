@@ -1,0 +1,7 @@
+interface:
+  display_name: "Nest · Frontend Rule"
+  short_description: "按任务加载并应用当前前端设计、源码产出与视觉验收规则"
+  default_prompt: "使用 $nest-rule-frontend 为当前前端任务加载并应用适用规则。"
+
+policy:
+  allow_implicit_invocation: true

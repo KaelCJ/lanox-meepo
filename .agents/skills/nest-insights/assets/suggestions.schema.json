@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "additionalProperties": false,
+  "required": ["title", "intro", "rule_candidates", "features", "patterns", "confidence"],
+  "properties": {
+    "title": {"type": "string"}, "intro": {"type": "string"},
+    "rule_candidates": {"type": "array", "minItems": 3, "maxItems": 6, "items": {"$ref": "#/$defs/rule"}},
+    "features": {"type": "array", "minItems": 2, "maxItems": 4, "items": {"$ref": "#/$defs/suggestion"}},
+    "patterns": {"type": "array", "minItems": 2, "maxItems": 4, "items": {"$ref": "#/$defs/suggestion"}},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+  },
+  "$defs": {
+    "refs": {"type": "array", "minItems": 1, "maxItems": 10, "items": {"type": "string"}},
+    "rule": {"type": "object", "additionalProperties": false, "required": ["section", "title", "content", "why", "evidence_refs"], "properties": {"section": {"type": "string"}, "title": {"type": "string"}, "content": {"type": "string"}, "why": {"type": "string"}, "evidence_refs": {"$ref": "#/$defs/refs"}}},
+    "suggestion": {"type": "object", "additionalProperties": false, "required": ["title", "summary", "why_for_you", "how_to_start", "copyable_prompt", "evidence_refs"], "properties": {"title": {"type": "string"}, "summary": {"type": "string"}, "why_for_you": {"type": "string"}, "how_to_start": {"type": "string"}, "copyable_prompt": {"type": "string"}, "evidence_refs": {"$ref": "#/$defs/refs"}}}
+  }
+}

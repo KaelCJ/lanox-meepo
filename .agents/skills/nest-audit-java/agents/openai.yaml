@@ -1,0 +1,7 @@
+interface:
+  display_name: "Nest · Java 代码审计"
+  short_description: "按通用或异常专项规则执行只读 Java 审计与证据判定"
+  default_prompt: "使用 $nest-audit-java 按请求选择通用或异常专项模式审计当前 Java 改动，并给出可定位证据、反例和最小修复建议。"
+
+policy:
+  allow_implicit_invocation: false

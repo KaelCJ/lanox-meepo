@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nest · Git 本地提交"
+  short_description: "提交我已暂存的内容为一个本地提交，验证并写好消息，不推送"
+  default_prompt: "使用 $nest-git-commit 检查当前仓库改动，按合理批次完成本地提交且不 push。"

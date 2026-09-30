@@ -1,0 +1,7 @@
+interface:
+  display_name: "Nest · API 代码安全审计"
+  short_description: "先冻结 API 清单，再逐 API 隔离深审并汇总风险优先级"
+  default_prompt: "使用 $nest-audit-security-api 先建立并冻结全部实际可达 API 清单，再为每个 API 创建独立深审目录和 Agent brief，分别还原保护链、调用图、时序、数据模型与逐目标结论，最后执行跨 API 流程/变体复核、独立 reviewer 和优先级汇总。"
+
+policy:
+  allow_implicit_invocation: false

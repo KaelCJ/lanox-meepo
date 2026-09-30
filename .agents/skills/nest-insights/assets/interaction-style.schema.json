@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "additionalProperties": false,
+  "required": ["title", "paragraphs", "key_pattern", "evidence_refs", "confidence"],
+  "properties": {
+    "title": {"type": "string"},
+    "paragraphs": {"type": "array", "minItems": 2, "maxItems": 4, "items": {"type": "string"}},
+    "key_pattern": {"type": "string"},
+    "evidence_refs": {"type": "array", "minItems": 2, "maxItems": 16, "items": {"type": "string"}},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+  }
+}

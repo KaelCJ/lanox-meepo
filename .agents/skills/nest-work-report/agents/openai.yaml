@@ -1,0 +1,7 @@
+interface:
+  display_name: "Nest · 工作日报"
+  short_description: "支持单日或批量日期及可选备注，自动扫描并估算日报工时"
+  default_prompt: "使用 $nest-work-report 根据一个或多个日期、上下班时间和可选备注生成简洁工作日报。"
+
+policy:
+  allow_implicit_invocation: false

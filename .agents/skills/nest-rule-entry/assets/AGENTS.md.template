@@ -1,0 +1,15 @@
+# <project-name> 项目规则
+
+> 本文件只保存当前项目专属且跨任务稳定的契约。通用启动上下文由 SessionStart Hook 送达，Agent Rule 任务路由由工作空间统一入口按需提供；当前工作、能力进度和历史不在本文件维护。
+
+## 工程边界
+
+- `<project-source-boundary>`
+- `<external-source-boundary>`
+- `<package-and-module-boundary>`
+
+## 运行与验证边界
+
+- `<runtime-boundary>`
+- `<log-boundary>`
+- `<project-validation-boundary>`

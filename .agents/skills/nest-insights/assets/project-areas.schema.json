@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "additionalProperties": false,
+  "required": ["title", "intro", "areas", "trend", "confidence"],
+  "properties": {
+    "title": {"type": "string"}, "intro": {"type": "string"}, "trend": {"type": "string"},
+    "areas": {"type": "array", "minItems": 3, "maxItems": 7, "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "sample_count", "description", "evidence_refs"],
+      "properties": {"name": {"type": "string"}, "sample_count": {"type": "integer", "minimum": 1}, "description": {"type": "string"}, "evidence_refs": {"$ref": "#/$defs/refs"}}
+    }},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+  },
+  "$defs": {"refs": {"type": "array", "minItems": 1, "maxItems": 12, "items": {"type": "string"}}}
+}

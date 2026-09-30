@@ -1,0 +1,7 @@
+interface:
+  display_name: "Nest Insights"
+  short_description: "扫描 Codex 会话历史并生成可审计的中文使用洞察报告"
+  default_prompt: "Use $nest-insights to analyze my available Codex sessions and generate the Chinese HTML insights report."
+
+policy:
+  allow_implicit_invocation: false

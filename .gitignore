@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local runtime and generated state
+.claude/worktrees/
+.claude/settings.local.json
+.codex/sessions/
+.workspace-assistant/cache/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Build and coverage
+build/
+dist/
+coverage/
+*.egg-info/

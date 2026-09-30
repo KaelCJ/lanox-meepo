@@ -1,0 +1,7 @@
+interface:
+  display_name: "Nest · Java Rule"
+  short_description: "按需加载当前项目的 Java 设计、产出与审计规则"
+  default_prompt: "为涉及 Java 源码设计、产出或审计的任务加载并应用适用规则。"
+
+policy:
+  allow_implicit_invocation: true

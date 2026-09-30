@@ -1,0 +1,67 @@
+# Codex command policy.
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "推送远程仓库前需要用户确认。",
+    match = [
+        "git push",
+        "git push origin main",
+        "git push --force-with-lease origin feature/demo",
+    ],
+    not_match = [
+        "git status",
+        "git -C repo push origin main",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "clean"],
+    decision = "forbidden",
+    justification = "不得删除未跟踪文件；使用 `git status --short` 检查工作区现状。",
+    match = [
+        "git clean",
+        "git clean -n",
+        "git clean -fd",
+        "git clean -fdx",
+    ],
+    not_match = [
+        "git status --short",
+        "git reset --hard",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "reset", "--hard"],
+    decision = "forbidden",
+    justification = "不得覆盖当前工作区中的已跟踪修改。",
+    match = [
+        "git reset --hard",
+        "git reset --hard HEAD",
+        "git reset --hard origin/main",
+    ],
+    not_match = [
+        "git reset HEAD README.md",
+        "git status --short",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "worktree", ["add", "move", "remove", "prune", "repair", "lock", "unlock"]],
+    decision = "forbidden",
+    justification = "Codex 任务只允许使用主工作区 Local 模式；可以使用 `git worktree list` 只读核对现状。",
+    match = [
+        "git worktree add ../workspace-temp",
+        "git worktree move ../old ../new",
+        "git worktree remove ../workspace-temp",
+        "git worktree prune",
+        "git worktree repair",
+        "git worktree lock ../workspace-temp",
+        "git worktree unlock ../workspace-temp",
+    ],
+    not_match = [
+        "git worktree list",
+        "git status",
+        "git -C repo worktree add ../workspace-temp",
+    ],
+)

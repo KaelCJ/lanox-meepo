@@ -1,0 +1,7 @@
+interface:
+  display_name: "Nest · 续接 Session"
+  short_description: "蒸馏一个 context 打爆的旧 Claude session，在新 session 续接"
+  default_prompt: "使用 $nest-session-resume <旧 session 标题片段、关键词或 local_<uuid>> 蒸馏旧 session，只读不写，先展示确认再注入当前 session。"
+
+policy:
+  allow_implicit_invocation: false

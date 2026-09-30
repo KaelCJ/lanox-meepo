@@ -1,0 +1,7 @@
+interface:
+  display_name: "Nest · 入口内容审计"
+  short_description: "全空间只读审计 Agent 入口内容、生效关系与双宿主配对差异"
+  default_prompt: "使用 $nest-audit-entry 只读审计当前工作空间全部 AGENTS.md 与 CLAUDE.md 的内容质量、生效关系及双宿主配对与差异。"
+
+policy:
+  allow_implicit_invocation: false

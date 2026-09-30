@@ -1,0 +1,7 @@
+interface:
+  display_name: "Nest · Session 归档"
+  short_description: "整理当前 Session，并闭环处理归档流程"
+  default_prompt: "使用 $nest-session-archive 只整理当前 Session 的事实并收敛到唯一工作项；后续 Session 仅作无聊天上下文恢复验收，不扫描、不创建或切换其他 Session，再处理退场材料并判断是否整体归档。"
+
+policy:
+  allow_implicit_invocation: false

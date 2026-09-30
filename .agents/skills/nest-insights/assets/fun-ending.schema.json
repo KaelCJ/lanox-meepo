@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "additionalProperties": false,
+  "required": ["headline", "detail", "evidence_refs", "confidence"],
+  "properties": {
+    "headline": {"type": "string"}, "detail": {"type": "string"},
+    "evidence_refs": {"type": "array", "minItems": 1, "maxItems": 8, "items": {"type": "string"}},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+  }
+}

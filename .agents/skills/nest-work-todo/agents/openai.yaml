@@ -1,0 +1,7 @@
+interface:
+  display_name: "Nest · 查看代办"
+  short_description: "按全局状态与各工作项简介汇总代办并给出建议排序"
+  default_prompt: "使用 $nest-work-todo 查看当前代办并给出建议优先级。"
+
+policy:
+  allow_implicit_invocation: false

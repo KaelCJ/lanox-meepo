@@ -1,0 +1,7 @@
+interface:
+  display_name: "Nest · 工作项"
+  short_description: "识别创建、继续、更新或只读 Review 意图并按需加载方法"
+  default_prompt: "使用 $nest-work-item 创建、继续、更新或只读 Review 对应工作项。"
+
+policy:
+  allow_implicit_invocation: true
