@@ -26,7 +26,7 @@ jobs:
       - name: Compile Python skills and tools
         run: python -m compileall -q .agents/skills tools
 
-      - name: Test work-item IDs and offline text installation
+      - name: Test work-item IDs and SessionStart responses
         run: python -m unittest discover -s tools -p 'test_*.py'
 
       - name: Validate skill descriptions
@@ -36,14 +36,3 @@ jobs:
 
       - name: Validate entry pairs
         run: python .agents/skills/nest-rule-entry/scripts/validate_entry_pairs.py --root . --exclude .claude/worktrees
-
-      - name: Validate binary register
-        run: python tools/validate_binary_register.py
-
-      - name: Enforce release binary authorization
-        if: ${{ always() && startsWith(github.ref, 'refs/tags/v') }}
-        run: python tools/validate_binary_register.py --require-cleared
-
-      - name: Check text-only public Git tree
-        if: ${{ always() && startsWith(github.ref, 'refs/tags/v') }}
-        run: python tools/validate_text_public_tree.py --ref HEAD

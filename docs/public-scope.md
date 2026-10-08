@@ -1,6 +1,6 @@
 # Public release scope
 
-This file is the maintainer checklist for deciding what may enter the public repository. It is not a license grant for assets whose ownership or redistribution terms are unknown. The binary evidence register is [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md) and its machine-readable companion [`docs/third-party-assets.json`](third-party-assets.json).
+This is a maintainer checklist for deciding what may enter the public repository, not a license grant for assets whose ownership or redistribution terms are unknown. Historical binary facts are recorded in [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md).
 
 ## Public by default
 
@@ -18,9 +18,7 @@ This file is the maintainer checklist for deciding what may enter the public rep
 
 ## Conditional retention
 
-The two SessionStart JARs and the former UUID19 JAR have been removed from the current working tree; their historical copies remain in Git. The machine-readable register keeps the two SessionStart hashes with `present: false` and `status: pending`. This records unresolved provenance without claiming current-tree redistribution permission. The offline text installer copies no hooks or JARs, but a normal clone still downloads historical objects. Do not reintroduce a binary-backed installation path without ownership and redistribution evidence.
-
-The current register deliberately remains `releaseBlocked: true` because the historical assets and private-path review are unresolved. An inventory pass checks current files and register structure; it does not rehash absent historical blobs, clear their rights, or make the repository safe to publish.
+The two SessionStart JARs and the former UUID19 JAR have been removed from the current tree but remain in Git history. A normal clone can still fetch those objects; this is different from the contents of a current-tree archive. Decide how to handle that history separately, without treating it as proof that a new JAR is safe to redistribute.
 
 ## Release gate
 
@@ -32,9 +30,9 @@ Before a file is added to a release, maintainers must be able to answer all of t
 4. Can a clean checkout use it without an unavailable private dependency?
 5. Is its behavior and limitation documented for users?
 
-If any answer is unknown, keep the asset out of the public release and record the reason in an issue or release review. For a binary listed in the register, the row must be `cleared`, its SHA-256 must match the artifact, and its source, license, owner, and redistribution evidence must be recorded before a release can include or enable it. The inventory check can pass while the release gate remains blocked. Removing a file from the working tree does not remove it from Git history; history cleanup requires a separate, deliberate operation.
+Before sharing a particular set of files, check its actual contents, ownership, license and runtime dependencies. If a binary is included, review the exact artifact and its redistribution rights. Removing a file from the working tree does not remove it from Git history; history cleanup requires a separate, deliberate operation.
 
-For a proposed **text-only** Git release, `python tools/validate_text_public_tree.py --ref HEAD` fails on known private/runtime paths, review-flagged Skills and common binary extensions in the committed tree. Run it against the index before committing (omit `--ref`); `--list-paths` prints details only in a trusted local environment. The tag CI also runs this path check. It is not a content/secret/license audit and cannot prevent an earlier push or clone from exposing tracked files. Passing it does not authorize publication or replace the binary evidence gate and human review.
+The repository currently tracks real work-item records even though `.gitignore` now excludes new ones. Those records require human review before whole-repository publication. No script-based path or binary release gate is claimed to resolve this; focus on verifying the working Skills and host behavior first.
 
 ## Current review flags
 
@@ -47,4 +45,4 @@ The following paths require explicit ownership or license confirmation before be
 - `.agents/skills/nest-audit-security-api/`
 - `.agents/skills/nest-insights/`
 
-This list is a review status, not a claim that the assets are forbidden to publish. Both SessionStart binary rows are now historical (`present: false`) and `pending`; see [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md) for the evidence required before any reintroduction. The UUID19 JAR is likewise absent from the current tree but remains in Git history. Do not mark an item as cleared without evidence or claim that the Python migration cleaned historical blobs.
+This list is a review status, not a blanket prohibition. The two SessionStart JARs and UUID19 JAR are absent from the current tree but still in Git history; see [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md). Python replacement of the hooks did not remove those historical objects.

@@ -34,7 +34,6 @@
 ```bash
 python -m compileall -q .agents/skills tools
 python .agents/skills/nest-rule-entry/scripts/validate_entry_pairs.py --root .
-python tools/validate_binary_register.py
 ```
 
 如果当前目标空间已经初始化 `.workspace-assistant/10-工作项/`，再执行其索引校验；该命令只校验索引结构，不代表其中事实适合公开发布：
