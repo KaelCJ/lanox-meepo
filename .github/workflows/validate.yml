@@ -1,0 +1,49 @@
+name: validate
+
+on:
+  push:
+    branches: [master]
+    tags: ['v*']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Compile Python skills and tools
+        run: python -m compileall -q .agents/skills tools
+
+      - name: Test work-item IDs and offline text installation
+        run: python -m unittest discover -s tools -p 'test_*.py'
+
+      - name: Validate skill descriptions
+        run: |
+          python -m pip install --disable-pip-version-check --quiet pyyaml
+          python .agents/skills/nest-rule-skill-description/scripts/check_descriptions.py --root .agents/skills
+
+      - name: Validate entry pairs
+        run: python .agents/skills/nest-rule-entry/scripts/validate_entry_pairs.py --root . --exclude .claude/worktrees
+
+      - name: Validate binary register
+        run: python tools/validate_binary_register.py
+
+      - name: Enforce release binary authorization
+        if: ${{ always() && startsWith(github.ref, 'refs/tags/v') }}
+        run: python tools/validate_binary_register.py --require-cleared
+
+      - name: Check text-only public Git tree
+        if: ${{ always() && startsWith(github.ref, 'refs/tags/v') }}
+        run: python tools/validate_text_public_tree.py --ref HEAD

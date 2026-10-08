@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-07",
+  "releaseBlocked": true,
+  "assets": [
+    {
+      "path": ".workspace-assistant/foundation/host-hooks/claude/claude-session-start.jar",
+      "role": "Optional Claude Code SessionStart workspace hook.",
+      "sha256": "22d2786d97bb1546e7f02c9d81b21c8ccfb69b8ea5a0031e56dcab632bb5e0f9",
+      "observed": {
+        "implementationTitle": "nest-component-workspace",
+        "implementationVersion": "1.0.0",
+        "buildJdk": "21",
+        "mainClass": "com.digiwin.dap.nest.component.workspace.agent.claude.hook.sessionstart.WorkspaceSessionStartHook"
+      },
+      "status": "pending",
+      "present": false,
+      "owner": null,
+      "source": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "notes": "Removed from the current working tree; the recorded hash identifies a historical Git artifact. The supplied module's existing build output has a different hash, so identity and redistribution permission remain unverified."
+    },
+    {
+      "path": ".workspace-assistant/foundation/host-hooks/codex/codex-session-start.jar",
+      "role": "Codex SessionStart workspace hook referenced by .codex/hooks.json.",
+      "sha256": "50927212e894b3cc2ffd9667888c090a584be635a709a2362abd6a2c087475f2",
+      "observed": {
+        "implementationTitle": "nest-component-workspace",
+        "implementationVersion": "1.0.0",
+        "buildJdk": "21",
+        "mainClass": "com.digiwin.dap.nest.component.workspace.agent.codex.hook.sessionstart.WorkspaceSessionStartHook"
+      },
+      "status": "pending",
+      "present": false,
+      "owner": null,
+      "source": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "notes": "Removed from the current working tree; the recorded hash identifies a historical Git artifact. The supplied module's existing build output has a different hash, so identity and redistribution permission remain unverified."
+    }
+  ]
+}

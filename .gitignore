@@ -4,10 +4,18 @@ __pycache__/
 .pytest_cache/
 
 # Local runtime and generated state
+.api-security-audit/
 .claude/worktrees/
 .claude/settings.local.json
 .codex/sessions/
+.nest-insights/
+.workspace-assistant/foundation/
+.workspace-assistant/10-工作项/
 .workspace-assistant/cache/
+nest-insights-report-*.html
+
+# Unverified binary runtime assets
+*.jar
 
 # Editors and operating systems
 .vscode/

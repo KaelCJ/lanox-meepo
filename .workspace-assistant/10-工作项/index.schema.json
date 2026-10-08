@@ -169,7 +169,7 @@
     "currentIndex": {
       "type": "object",
       "title": "当前工作项索引",
-      "description": "current.json 的根对象；新工作项标识由 Nest UUID19 独立生成。",
+      "description": "current.json 的根对象；新标识由 Python UUID4 生成，已有标识按原样保存和匹配。",
       "additionalProperties": false,
       "required": [
         "schemaVersion",
