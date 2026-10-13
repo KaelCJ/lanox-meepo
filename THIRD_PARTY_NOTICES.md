@@ -4,6 +4,7 @@ The current tree no longer contains the UUID19 JAR or the two SessionStart JARs,
 
 | Former asset | SHA-256 | Historical use |
 |---|---|---|
+| `.agents/skills/nest-work-item/assets/nest-uuid19.jar` | `f58a14c31b6ae0761561a5fcf1fdfb417916b8d0231a9471c8f5b8b0d68b66ca` | Former work-item ID generator |
 | `.workspace-assistant/foundation/host-hooks/claude/claude-session-start.jar` | `22d2786d97bb1546e7f02c9d81b21c8ccfb69b8ea5a0031e56dcab632bb5e0f9` | Optional Claude Code SessionStart hook |
 | `.workspace-assistant/foundation/host-hooks/codex/codex-session-start.jar` | `50927212e894b3cc2ffd9667888c090a584be635a709a2362abd6a2c087475f2` | Codex SessionStart hook |
 
