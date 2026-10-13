@@ -1,4 +1,7 @@
 interface:
   display_name: "Nest · Git 本地提交"
-  short_description: "提交我已暂存的内容为一个本地提交，验证并写好消息，不推送"
-  default_prompt: "使用 $nest-git-commit 检查当前仓库改动，按合理批次完成本地提交且不 push。"
+  short_description: "全量暂存后按主题聚合成粗粒度批次，逐批完成本地提交且不推送"
+  default_prompt: "使用 $nest-git-commit 读取当前仓库全部改动，按主题分批完成本地提交且不 push。"
+
+policy:
+  allow_implicit_invocation: false

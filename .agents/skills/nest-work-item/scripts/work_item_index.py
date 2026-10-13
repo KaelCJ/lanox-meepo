@@ -7,7 +7,9 @@ import argparse
 import json
 import os
 import re
+import shutil
 import stat
+import subprocess
 import sys
 import uuid
 from datetime import datetime
@@ -40,7 +42,7 @@ CURRENT_FIELDS = {
 ARCHIVE_FIELDS = CURRENT_FIELDS | {"archivedAt"}
 ROOT_FIELDS = {"schemaVersion", "items"}
 CURRENT_SUMMARY_HEADING = "## 当前简介"
-ID_STRATEGY = "r-uuid4"
+UUID19_JAR = Path(__file__).resolve().parent.parent / "assets" / "nest-uuid19.jar"
 
 
 def emit(value: Dict[str, Any]) -> None:
@@ -197,8 +199,8 @@ def validate_item(root: Path, item: Any, archived: bool) -> None:
         raise ValueError(f"{item_id} title must not be empty")
     for field in ("type", "product"):
         value = item[field]
-        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
-            raise ValueError(f"{item_id} {field} must be a non-negative integer")
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise ValueError(f"{item_id} {field} must be an integer")
     if item["priority"] not in PRIORITIES:
         raise ValueError(f"{item_id} priority is invalid: {item['priority']}")
 
@@ -345,12 +347,31 @@ def schema_asset() -> Path:
 def generated_work_item_id(
     current: Dict[str, Any], archive: Dict[str, Any]
 ) -> str:
+    java = shutil.which("java")
+    if java is None:
+        raise RuntimeError("Java is required to generate Nest UUID19 work-item IDs")
+    if not UUID19_JAR.is_file():
+        raise FileNotFoundError(UUID19_JAR)
+
     used = {item["id"].casefold() for _, item in scoped_items(current, archive, "all")}
     for _ in range(10):
-        token = f"R{uuid.uuid4().hex}"
+        result = subprocess.run(
+            [java, "-jar", str(UUID19_JAR)],
+            capture_output=True,
+            check=False,
+            text=True,
+            encoding="utf-8",
+            timeout=10,
+        )
+        if result.returncode != 0:
+            detail = result.stderr.strip() or "unknown UUID19 generator error"
+            raise RuntimeError(f"Nest UUID19 generator failed: {detail}")
+        token = result.stdout.strip()
+        if re.fullmatch(r"R[0-9a-zA-Z]{19}", token) is None:
+            raise RuntimeError("Nest UUID19 generator returned an invalid work-item ID")
         if token.casefold() not in used:
             return token
-    raise RuntimeError("could not allocate a unique UUID4 work-item ID")
+    raise RuntimeError("could not allocate a unique Nest UUID19 work-item ID")
 
 
 def existing_work_item_directories(root: Path) -> List[Path]:
@@ -408,7 +429,7 @@ def initialize(root: Path) -> Dict[str, Any]:
         "currentIndex": str(current_path),
         "archiveIndex": str(archive_path),
         "schema": str(schema_path),
-        "idStrategy": ID_STRATEGY,
+        "idStrategy": "uuid19",
     }
 
 
@@ -615,7 +636,7 @@ def parser() -> argparse.ArgumentParser:
     find_command.add_argument("--scope", choices=("current", "archive", "all"), default="current")
     find_command.add_argument("--limit", type=int, default=10)
 
-    commands.add_parser("new-id", help="Generate one unused R-prefixed UUID4 work-item ID")
+    commands.add_parser("new-id", help="Generate one unused Nest UUID19 work-item ID")
 
     candidates = commands.add_parser(
         "candidates", help="Search both indexes and entry READMEs"
@@ -693,7 +714,7 @@ def main(arguments: Optional[Sequence[str]] = None) -> int:
             payload.update(
                 {
                     "id": generated_work_item_id(current, archive),
-                    "idStrategy": ID_STRATEGY,
+                    "idStrategy": "uuid19",
                 }
             )
         elif options.command == "create":
@@ -708,7 +729,7 @@ def main(arguments: Optional[Sequence[str]] = None) -> int:
             )
         emit(payload)
         return 0
-    except (OSError, RuntimeError, ValueError) as error:
+    except (OSError, RuntimeError, ValueError, subprocess.TimeoutExpired) as error:
         emit({"error": str(error)})
         return 1
 

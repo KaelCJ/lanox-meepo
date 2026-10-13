@@ -1,0 +1,7 @@
+interface:
+  display_name: "Nest · Workspace 同步"
+  short_description: "把当前公共 Nest Workspace 资产安全同步到目标目录"
+  default_prompt: "使用 $nest-workspace-sync 把当前来源的公共 Nest Workspace 资产同步到我指定的绝对目录。"
+
+policy:
+  allow_implicit_invocation: true
