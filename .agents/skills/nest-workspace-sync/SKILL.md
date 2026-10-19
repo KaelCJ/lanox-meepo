@@ -76,7 +76,7 @@ python -X utf8 "<当前来源绝对路径>\.agents\skills\nest-workspace-sync\sc
 
 ## 执行
 
-Agent 临时、备份和可丢弃验证产物使用 `D:\Development\AI\Codex\Tmp\<task-id>\`。备份根必须位于该任务自己的子目录，且不能位于来源或目标内部。
+Agent 临时、备份和可丢弃验证产物使用当前来源工作空间根目录下的 `.tmp/<task-id>/`。备份根必须位于该任务自己的子目录，不得直接使用 `.tmp/` 根目录，不得位于目标内部，也不得与目标重叠。
 
 执行：
 

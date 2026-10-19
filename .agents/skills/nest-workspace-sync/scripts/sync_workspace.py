@@ -69,7 +69,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--backup-root",
         required=False,
-        help="Absolute directory below the source workspace's governed temporary root",
+        help="Absolute task directory below the source workspace's .tmp/ root",
     )
     return parser.parse_args()
 
@@ -166,9 +166,14 @@ def reject_overlap(
     if is_within(source, target) or is_within(target, source):
         raise SyncError(f"source and target must not be equal or nested: {source} -> {target}")
     if backup_root is not None:
-        for workspace, label in ((source, "source"), (target, "target")):
-            if is_within(backup_root, workspace) or is_within(workspace, backup_root):
-                raise SyncError(f"backup root must not overlap {label} workspace: {backup_root}")
+        temporary_root = source / ".tmp"
+        if backup_root == temporary_root or not is_within(backup_root, temporary_root):
+            raise SyncError(
+                "backup root must be a task directory below the source "
+                f"workspace's .tmp/ root: {temporary_root}"
+            )
+        if is_within(backup_root, target) or is_within(target, backup_root):
+            raise SyncError(f"backup root must not overlap target workspace: {backup_root}")
 
 
 def validate_path_chain(workspace: Path, relative: Path, label: str) -> None:
