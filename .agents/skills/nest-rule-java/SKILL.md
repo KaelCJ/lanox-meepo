@@ -1,6 +1,9 @@
 ---
 name: nest-rule-java
-description: 当用户要求或显式调用 `$nest-rule-java`、点名 `nest-rule-java`、指定 `.agents/skills/nest-rule-java/SKILL.md` 或明确要求使用项目 Java Rule，或任务需要作出 Java 源码设计决策、创建、修改、生成、重构、审计或评审结论时使用；即使 Java 工作夹在前端或其他任务中也适用。仅提及 Java、依赖或引用 Java 代码，以及纯需求、方案、执行文档、工作项、代码解释、事实定位、测试、日志、构建、运行验证或非 Java 资源任务不使用。
+description: >
+  任务需要应用或判断 Java 源码规则，或涉及 Java 源码的设计、创建、生成、修改、重构、审计、评审时使用；
+  用户显式调用 `$nest-rule-java`、点名本 Skill、指定其 `SKILL.md`，或明确要求使用项目 Java Rule 时也使用。
+  仅涉及与 Java 源码规则无关的文档、事实查询、代码解释、日志、测试、构建、运行验证或非 Java 资源时不使用。
 ---
 
 # Java Rule 加载

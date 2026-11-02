@@ -30,6 +30,25 @@
         "未设置"
       ]
     },
+    "createdBy": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "title": "创建人",
+      "description": "创建时记录 Git user.email 并保留；不可用时为 null，历史记录可缺省。",
+      "pattern": "\\S"
+    },
+    "updatedBy": {
+      "type": "array",
+      "title": "修改人",
+      "description": "归档时追加 Git user.email，忽略大小写去重；不可用时跳过。创建时为空，历史记录可缺省。",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "\\S"
+      }
+    },
     "currentItem": {
       "type": "object",
       "title": "当前工作项",
@@ -84,6 +103,12 @@
           "$ref": "#/$defs/timestamp",
           "title": "更新时间",
           "description": "工作项索引事实最后变化的秒级时间。"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/createdBy"
+        },
+        "updatedBy": {
+          "$ref": "#/$defs/updatedBy"
         },
         "entry": {
           "type": "string",
@@ -149,6 +174,12 @@
           "$ref": "#/$defs/timestamp",
           "title": "更新时间",
           "description": "工作项索引事实最后变化的秒级时间。"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/createdBy"
+        },
+        "updatedBy": {
+          "$ref": "#/$defs/updatedBy"
         },
         "entry": {
           "title": "工作项入口",

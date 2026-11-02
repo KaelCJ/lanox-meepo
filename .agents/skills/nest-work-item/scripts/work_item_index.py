@@ -40,6 +40,7 @@ CURRENT_FIELDS = {
     "entry",
 }
 ARCHIVE_FIELDS = CURRENT_FIELDS | {"archivedAt"}
+PEOPLE_FIELDS = {"createdBy", "updatedBy"}
 ROOT_FIELDS = {"schemaVersion", "items"}
 CURRENT_SUMMARY_HEADING = "## 当前简介"
 UUID19_JAR = Path(__file__).resolve().parent.parent / "assets" / "nest-uuid19.jar"
@@ -94,16 +95,42 @@ def read_json(path: Path) -> Dict[str, Any]:
 
 
 def require_exact_fields(
-    value: Dict[str, Any], expected: Iterable[str], context: str
+    value: Dict[str, Any],
+    expected: Iterable[str],
+    context: str,
+    optional: Iterable[str] = (),
 ) -> None:
     expected_set = set(expected)
     actual = set(value)
     missing = sorted(expected_set - actual)
-    extra = sorted(actual - expected_set)
+    extra = sorted(actual - expected_set - set(optional))
     if missing:
         raise ValueError(f"{context} missing fields: {', '.join(missing)}")
     if extra:
         raise ValueError(f"{context} has unsupported fields: {', '.join(extra)}")
+
+
+def git_email(root: Path) -> Optional[str]:
+    def run(*arguments: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            ["git", "-C", str(root), *arguments],
+            capture_output=True,
+            check=False,
+            text=True,
+            encoding="utf-8",
+            timeout=10,
+        )
+
+    try:
+        repository = run("rev-parse", "--is-inside-work-tree")
+        if repository.returncode != 0 or repository.stdout.strip() != "true":
+            return None
+        result = run("config", "--get", "user.email")
+        if result.returncode != 0:
+            return None
+        return result.stdout.strip() or None
+    except (OSError, subprocess.TimeoutExpired, UnicodeError):
+        return None
 
 
 def parse_timestamp(value: Any, field: str, item_id: str) -> datetime:
@@ -190,7 +217,7 @@ def validate_item(root: Path, item: Any, archived: bool) -> None:
         raise ValueError("work-item record must be an object")
     expected = ARCHIVE_FIELDS if archived else CURRENT_FIELDS
     item_id = str(item.get("id", "<unknown>"))
-    require_exact_fields(item, expected, f"work item {item_id}")
+    require_exact_fields(item, expected, f"work item {item_id}", PEOPLE_FIELDS)
 
     item_id = item["id"]
     if not isinstance(item_id, str) or not item_id.strip():
@@ -203,6 +230,21 @@ def validate_item(root: Path, item: Any, archived: bool) -> None:
             raise ValueError(f"{item_id} {field} must be an integer")
     if item["priority"] not in PRIORITIES:
         raise ValueError(f"{item_id} priority is invalid: {item['priority']}")
+
+    creator = item.get("createdBy")
+    if creator is not None and (not isinstance(creator, str) or not creator.strip()):
+        raise ValueError(f"{item_id} createdBy must be a non-empty email or null")
+    if "updatedBy" in item:
+        if not isinstance(item["updatedBy"], list):
+            raise ValueError(f"{item_id} updatedBy must be an array")
+        emails = set()
+        for email in item["updatedBy"]:
+            if not isinstance(email, str) or not email.strip():
+                raise ValueError(f"{item_id} updatedBy must contain non-empty emails")
+            email = email.strip().casefold()
+            if email in emails:
+                raise ValueError(f"{item_id} updatedBy contains a duplicate email")
+            emails.add(email)
 
     created = parse_timestamp(item["createdAt"], "createdAt", item_id)
     updated = parse_timestamp(item["updatedAt"], "updatedAt", item_id)
@@ -323,11 +365,24 @@ def replace_many(values: Sequence[Tuple[Path, str]]) -> None:
 
 def write_indexes(root: Path, current: Dict[str, Any], archive: Dict[str, Any]) -> None:
     validate_indexes(root, current, archive)
-    current_path, archive_path, _ = index_paths(root)
+    current_path, archive_path, schema_path = index_paths(root)
+    asset = read_json(schema_asset())
+    schema = read_json(schema_path)
+    try:
+        for name in ("createdBy", "updatedBy"):
+            schema["$defs"][name] = asset["$defs"][name]
+        for name in ("currentItem", "archiveItem"):
+            for field in ("createdBy", "updatedBy"):
+                schema["$defs"][name]["properties"].setdefault(
+                    field, asset["$defs"][name]["properties"][field]
+                )
+    except (KeyError, TypeError, AttributeError) as error:
+        raise ValueError("work-item schema has an unsupported structure") from error
     replace_many(
         [
             (path, serialize(index))
             for path, index in (
+                (schema_path, schema),
                 (current_path, current),
                 (archive_path, archive),
             )
@@ -549,6 +604,8 @@ def create_item(
         "priority": options.priority,
         "createdAt": timestamp,
         "updatedAt": updated_at,
+        "createdBy": git_email(root),
+        "updatedBy": [],
         "entry": options.entry,
     }
     current["items"].append(item)
@@ -599,6 +656,11 @@ def move_item(
     moved_item["updatedAt"] = at
     if archive_item:
         moved_item["archivedAt"] = at
+        email = git_email(root)
+        if email is not None:
+            modifiers = moved_item.setdefault("updatedBy", [])
+            if all(person.strip().casefold() != email.casefold() for person in modifiers):
+                modifiers.append(email)
     else:
         moved_item.pop("archivedAt", None)
 
